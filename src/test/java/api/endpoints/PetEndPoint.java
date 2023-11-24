@@ -2,50 +2,54 @@ package api.endpoints;
 
 import static io.restassured.RestAssured.given;
 
-import api.payload.User;
+import java.util.ResourceBundle;
+
+import api.payload.Pet;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 //For CRUD - create, read, update, delete
 
-public class UserEndPoint2 {
-	public static Response createUser(User payload) {
+public class PetEndPoint {
+	
+	static ResourceBundle endPointURLs = ResourceBundle.getBundle("routes");
+	
+	public static Response createPet(Pet payload) {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
 			.body(payload)
 		.when()
-			.post(Routes.POST_URL);
+			.post(endPointURLs.getString("PET_CREATE_URL"));
 		
 		return response;
 	}
 	
-	public static Response readUser(String userName) {
+	public static Response readPet(int petId) {
 		Response response = given()
-			.pathParam("username", userName)
+			.pathParam("petId", petId)
 		.when()
-			.get(Routes.GET_URL);
+			.get(endPointURLs.getString("PET_GET_URL"));
 		
 		return response;
 	}
 	
-	public static Response updateUser(String userName, User payload) {
+	public static Response updatePet(Pet payload) {
 		Response response = given()
 			.contentType(ContentType.JSON)
 			.accept(ContentType.JSON)
-			.pathParam("username", userName)
 			.body(payload)
 		.when()
-			.put(Routes.UPDATE_URL);
+			.put(endPointURLs.getString("PET_UPDATE_URL"));
 		
 		return response;
 	}
 	
-	public static Response deleteUser(String userName) {
+	public static Response deletePet(int petId) {
 		Response response = given()
-			.pathParam("username", userName)
+			.pathParam("petId", petId)
 		.when()
-			.delete(Routes.DELETE_URL);
+			.delete(endPointURLs.getString("PET_DELETE_URL"));
 		
 		return response;
 	}

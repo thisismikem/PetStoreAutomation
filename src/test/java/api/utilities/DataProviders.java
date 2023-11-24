@@ -1,43 +1,38 @@
 package api.utilities;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.testng.annotations.DataProvider;
 
+import com.poiji.bind.Poiji;
+import com.poiji.option.PoijiOptions;
+
+import api.payload.Pet;
+import api.payload.User;
+
 public class DataProviders {
 	
-	@DataProvider(name = "Data")
-	public String[][] getAllData() throws IOException {
-		String path = System.getProperty("user.dir") + "\\testData\\Userdata.xlsx";
-		XLUtility xl = new XLUtility(path);
+	@DataProvider(name = "UserData")
+	public User[] getUserData() throws IOException {
+		String path = System.getProperty("user.dir") + "\\testData\\userdata.xlsx";
 		
-		int rownum = xl.getRowCount("Sheet1");
-		int colcount = xl.getCellCount("sheet1", 1);
-		
-		String apidata[][] = new String[rownum][colcount];
-		
-		for (int i = 1; i <= rownum; i++) {
-			for (int j = 0; j < colcount; j++) {
-				apidata[i - 1][j] = xl.getCelldata("Sheet1", i, j);
-			}
-		}
-		
-		return apidata;
+		List<User> res = Poiji.fromExcel(new File(path), User.class);
+        return res.toArray(new User[res.size()]);
 	}
 	
-	@DataProvider(name = "UserNames")
-	public String[] getUserNames() throws IOException {
-		String path = System.getProperty("user.dir") + "\\testData\\Userdata.xlsx";
-		XLUtility xl = new XLUtility(path);
+
+	@DataProvider(name = "PetData")
+	public Pet[] getAllPetData() throws IOException {
+		String path = System.getProperty("user.dir") + "\\testData\\petdata.xlsx";
 		
-		int rownum = xl.getRowCount("Sheet1");
+		PoijiOptions options = PoijiOptions.PoijiOptionsBuilder.settings()
+                .headerCount(2) // since we have two header rows
+                .build();
+
+		List<Pet> pets = Poiji.fromExcel(new File(path), Pet.class, options);
 		
-		String apidata[] = new String[rownum];
-		
-		for (int i = 1; i <= rownum; i++) {
-			apidata[i - 1] = xl.getCelldata("Sheet1", i, 1);
-		}
-		
-		return apidata;
+        return pets.toArray(new Pet[pets.size()]);
 	}
 }

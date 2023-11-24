@@ -20,7 +20,7 @@ public class UserEndPoint {
 			.accept(ContentType.JSON)
 			.body(payload)
 		.when()
-			.post(endPointURLs.getString("POST_URL"));
+			.post(endPointURLs.getString("USER_CREATE_URL"));
 		
 		return response;
 	}
@@ -29,7 +29,7 @@ public class UserEndPoint {
 		Response response = given()
 			.pathParam("username", userName)
 		.when()
-			.get(endPointURLs.getString("GET_URL"));
+			.get(endPointURLs.getString("USER_GET_URL"));
 		
 		return response;
 	}
@@ -41,7 +41,7 @@ public class UserEndPoint {
 			.pathParam("username", userName)
 			.body(payload)
 		.when()
-			.put(endPointURLs.getString("UPDATE_URL"));
+			.put(endPointURLs.getString("USER_UPDATE_URL"));
 		
 		return response;
 	}
@@ -50,7 +50,7 @@ public class UserEndPoint {
 		Response response = given()
 			.pathParam("username", userName)
 		.when()
-			.delete(endPointURLs.getString("DELETE_URL"));
+			.delete(endPointURLs.getString("USER_DELETE_URL"));
 		
 		return response;
 	}
