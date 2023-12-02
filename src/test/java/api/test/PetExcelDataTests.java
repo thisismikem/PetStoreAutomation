@@ -7,12 +7,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import api.utilities.DataProviders;
-import api.endpoints.PetEndPoint;
+import api.endpoints.EndPoint;
 import api.payload.Pet;
 import io.restassured.response.Response;
 
 
-public class DDPetTests {
+public class PetExcelDataTests {
 	
 	public Logger logger;
 
@@ -27,7 +27,7 @@ public class DDPetTests {
 		
 		logger.info("************* Creating pets from Excel **************");
 
-		Response response = PetEndPoint.createPet(pet);
+		Response response = EndPoint.performPost(pet, "PET_CREATE_URL");
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
 		logger.info("************* Pets created from Excel **************");
@@ -36,10 +36,10 @@ public class DDPetTests {
 	@Test(priority = 7, dataProvider = "PetData", dataProviderClass = DataProviders.class)
 	public void testDeletePetById(Pet pet) {
 		
-		Response response = PetEndPoint.deletePet(pet.getId());
+		Response response = EndPoint.performDelete("PET_DELETE_URL", "petId", pet.getId());
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseDeleted = PetEndPoint.readPet(pet.getId());
+		Response responseDeleted = EndPoint.performGet("PET_GET_URL", "petId", pet.getId());
 		Assert.assertEquals(responseDeleted.getStatusCode(), 404);
 	}
 	

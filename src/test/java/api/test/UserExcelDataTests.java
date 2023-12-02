@@ -7,12 +7,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import api.utilities.DataProviders;
-import api.endpoints.UserEndPoint;
+import api.endpoints.EndPoint;
 import api.payload.User;
 import io.restassured.response.Response;
 
 
-public class DDUserTests {
+public class UserExcelDataTests {
 	
 	public Logger logger;
 
@@ -27,7 +27,7 @@ public class DDUserTests {
 		
 		logger.info("************* Creating users from Excel **************");
 
-		Response response = UserEndPoint.createUser(user);
+		Response response = EndPoint.performPost(user, "USER_CREATE_URL");
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
 		logger.info("************* Users created from Excel **************");
@@ -36,10 +36,10 @@ public class DDUserTests {
 	@Test(priority = 7, dataProvider = "UserData", dataProviderClass = DataProviders.class)
 	public void testDeleteUserByName(User user) {
 		
-		Response response = UserEndPoint.deleteUser(user.getUsername());
+		Response response = EndPoint.performDelete("USER_DELETE_URL", "username", user.getUsername());
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseDeleted = UserEndPoint.readUser(user.getUsername());
+		Response responseDeleted = EndPoint.performGet("USER_GET_URL", "username", user.getUsername());
 		Assert.assertEquals(responseDeleted.getStatusCode(), 404);
 	}
 	

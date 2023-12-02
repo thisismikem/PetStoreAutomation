@@ -9,9 +9,12 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 
-import api.endpoints.PetEndPoint;
+import api.endpoints.EndPoint;
 import api.payload.Pet;
 import api.payload.Pet.Category;
 import api.payload.Pet.Tag;
@@ -46,11 +49,26 @@ public class PetTests {
 		
 		logger.info("************* Creating Pet **************");
 		
-		Response response = PetEndPoint.createPet(petPayload);
+		Response response = EndPoint.performPost(petPayload, "PET_CREATE_URL");
 		response.then().log().all();
 		
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
+		//test response payload object
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = response.body().asString();
+
+	    try {
+			Pet petResponsePayload = mapper.readValue(jsonStr, Pet.class);
+			Assert.assertEquals(petPayload, petResponsePayload);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		logger.info("************* Pet created **************");
 
 	}
@@ -59,7 +77,7 @@ public class PetTests {
 	public void testGetPetByID() {
 		logger.info("************* Reading Pet **************");
 
-		Response response = PetEndPoint.readPet(petPayload.getId());
+		Response response = EndPoint.performGet("PET_GET_URL", "petId", petPayload.getId());
 		response.then().log().all();
 		
 		Assert.assertEquals(response.getStatusCode(), 200);
@@ -75,12 +93,12 @@ public class PetTests {
 		petPayload.setName("jiji");
 		petPayload.setStatus("coming");
 		
-		Response response = PetEndPoint.updatePet(petPayload);
+		Response response = EndPoint.performPut(petPayload, "PET_UPDATE_URL", null);
 		response.then().log().all();
 		
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseUpdated = PetEndPoint.readPet(petPayload.getId());
+		Response responseUpdated = EndPoint.performGet("PET_GET_URL", "petId", petPayload.getId());
 		
 		Assert.assertEquals(responseUpdated.getStatusCode(), 200);
 		Assert.assertEquals(responseUpdated.path("status"), petPayload.getStatus());
@@ -88,13 +106,11 @@ public class PetTests {
 	
 	@Test(priority = 4)
 	public void testDeletePet() {
-		Response response = PetEndPoint.deletePet(petPayload.getId());
+		Response response = EndPoint.performDelete("PET_DELETE_URL", "petId", petPayload.getId());
 		response.then().log().all();
-		
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseDeleted = PetEndPoint.readPet(petPayload.getId());
-		
+		Response responseDeleted = EndPoint.performGet("PET_GET_URL", "petId", petPayload.getId());
 		Assert.assertEquals(responseDeleted.getStatusCode(), 404);
 	}
 }
