@@ -13,7 +13,7 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
-public class ExtentReportManager implements ITestListener {
+public class ExtentListeners implements ITestListener {
 	
 	public ExtentSparkReporter sparkReporter;
 	public ExtentReports extent;
