@@ -1,0 +1,56 @@
+[
+	  {
+	    "id": 1001,
+	    "category": {
+	      "id": 10,
+	      "name": "something1"
+	    },
+	    "name": "fish",
+	    "photoUrls": [
+	      "url1"
+	    ],
+	    "tags": [
+	      {
+	        "id": 0,
+	        "name": "cat fish"
+	      }
+	    ],
+	    "status": "available"
+	  },
+	  {
+	    "id": 1002,
+	    "category": {
+	      "id": 11,
+	      "name": "something2"
+	    },
+	    "name": "fish",
+	    "photoUrls": [
+	      "url2"
+	    ],
+	    "tags": [
+	      {
+	        "id": 0,
+	        "name": "gold fish"
+	      }
+	    ],
+	    "status": "pending"
+	  },
+	  {
+	    "id": 1003,
+	    "category": {
+	      "id": 12,
+	      "name": "something3"
+	    },
+	    "name": "fish",
+	    "photoUrls": [
+	      "url3"
+	    ],
+	    "tags": [
+	      {
+	        "id": 0,
+	        "name": "fish burger"
+	      }
+	    ],
+	    "status": "sold"
+	  }
+	]

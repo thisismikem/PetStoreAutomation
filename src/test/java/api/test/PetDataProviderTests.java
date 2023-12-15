@@ -6,13 +6,17 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import api.utilities.DataProviders;
 import api.endpoints.EndPoint;
 import api.payload.Pet;
 import io.restassured.response.Response;
 
 
-public class PetExcelDataTests {
+public class PetDataProviderTests {
 	
 	public Logger logger;
 
@@ -30,6 +34,21 @@ public class PetExcelDataTests {
 		Response response = EndPoint.performPost(pet, "PET_CREATE_URL");
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
+		//test response payload object
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = response.body().asString();
+
+	    try {
+			Pet petResponsePayload = mapper.readValue(jsonStr, Pet.class);
+			Assert.assertEquals(pet, petResponsePayload);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			    
 		logger.info("************* Pets created from Excel **************");
 	}
 	
@@ -43,6 +62,16 @@ public class PetExcelDataTests {
 		Assert.assertEquals(responseDeleted.getStatusCode(), 404);
 	}
 	
+	@Test(priority = 8, dataProvider = "PetDataJson", dataProviderClass = DataProviders.class)
+	public void testPostPetJson(Pet pet) {
+		
+		logger.info("************* Creating pets from Json **************");
+
+		Response response = EndPoint.performPost(pet, "PET_CREATE_URL");
+		Assert.assertEquals(response.getStatusCode(), 200);
+		
+		logger.info("************* Pets created from Json **************");
+	}
 }
 
 

@@ -2,10 +2,14 @@ package api.utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.testng.annotations.DataProvider;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.poiji.bind.Poiji;
 import com.poiji.option.PoijiOptions;
 
@@ -24,7 +28,7 @@ public class DataProviders {
 	
 
 	@DataProvider(name = "PetData")
-	public Pet[] getAllPetData() throws IOException {
+	public Pet[] getAllPetData() {
 		String path = System.getProperty("user.dir") + "\\testData\\petdata.xlsx";
 		
 		PoijiOptions options = PoijiOptions.PoijiOptionsBuilder.settings()
@@ -35,4 +39,17 @@ public class DataProviders {
 		
         return pets.toArray(new Pet[pets.size()]);
 	}
+	
+	@DataProvider(name = "PetDataJson")
+	public Pet[] getAllPetDataJson() throws IOException {
+		String path = System.getProperty("user.dir") + "\\testData\\petdata.json";
+		
+	    String json = Files.readString(Paths.get(path));
+
+	    Gson gson = new Gson();
+	    List<Pet> pets = gson.fromJson(json, new TypeToken<List<Pet>>() {}.getType());
+		
+        return pets.toArray(new Pet[pets.size()]);
+	}
+	
 }

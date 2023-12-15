@@ -12,7 +12,7 @@ import api.payload.User;
 import io.restassured.response.Response;
 
 
-public class UserExcelDataTests {
+public class UserDataProviderTests {
 	
 	public Logger logger;
 

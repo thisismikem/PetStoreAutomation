@@ -7,14 +7,14 @@
 	
 	<test name="UserTests">
 	  <classes>
-	    <class name="api.test.UserExcelDataTests"/>
+	    <class name="api.test.UserDataProviderTests"/>
 	    <class name="api.test.UserTests"/>
 	  </classes>
 	</test> <!-- UserTests -->
 	
 	<test name="PetTests">
 	  <classes>
-	    <class name="api.test.PetExcelDataTests"/>
+	    <class name="api.test.PetDataProviderTests"/>
 	    <class name="api.test.PetTests"/>
 	  </classes>
 	</test> <!-- PetTests -->
