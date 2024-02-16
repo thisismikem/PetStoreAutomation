@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Pet {
 	
 	@ExcelCellName("PetID")
-	private int id;
+	private long id;
 	
 	@ExcelCellRange
 	private Category category;
@@ -36,6 +36,8 @@ public class Pet {
 	
 	@ExcelCellName("Status")
 	private String status;
+
+	private int ageTest;
 	
 	@Data
 	@JsonAutoDetect(fieldVisibility = Visibility.ANY)

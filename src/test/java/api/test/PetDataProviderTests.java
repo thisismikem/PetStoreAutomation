@@ -1,30 +1,17 @@
 package api.test;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
+import api.endpoints.EndPoint;
+import api.payload.Pet;
+import api.utilities.DataProviders;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import api.utilities.DataProviders;
-import api.endpoints.EndPoint;
-import api.payload.Pet;
 import io.restassured.response.Response;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 
-public class PetDataProviderTests {
-	
-	public Logger logger;
-
-	@BeforeClass
-	public void setupData() {
-		//logs
-		logger = LogManager.getLogger(this.getClass());
-	}
+public class PetDataProviderTests extends BaseTest {
 	
 	@Test(priority = 5, dataProvider = "PetData", dataProviderClass = DataProviders.class)
 	public void testPostPet(Pet pet) {
@@ -58,7 +45,7 @@ public class PetDataProviderTests {
 		Response response = EndPoint.performDelete("PET_DELETE_URL", "petId", pet.getId());
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseDeleted = EndPoint.performGet("PET_GET_URL", "petId", pet.getId());
+		Response responseDeleted = EndPoint.performGetByParamName("PET_GET_URL", "petId", pet.getId());
 		Assert.assertEquals(responseDeleted.getStatusCode(), 404);
 	}
 	

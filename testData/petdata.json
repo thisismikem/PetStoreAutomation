@@ -36,7 +36,7 @@
 	    "status": "pending"
 	  },
 	  {
-	    "id": 1003,
+	    "id": 9527,
 	    "category": {
 	      "id": 12,
 	      "name": "something3"
@@ -46,11 +46,15 @@
 	      "url3"
 	    ],
 	    "tags": [
-	      {
-	        "id": 0,
-	        "name": "fish burger"
-	      }
-	    ],
+			{
+				"id": 1,
+				"name": "fish burger"
+			},
+			{
+				"id": 2,
+				"name": "pig burger"
+			}
+		],
 	    "status": "sold"
 	  }
 	]

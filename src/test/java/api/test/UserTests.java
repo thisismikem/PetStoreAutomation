@@ -1,28 +1,24 @@
 package api.test;
 
-import java.util.Map;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import api.endpoints.EndPoint;
+import api.payload.User;
+import com.github.javafaker.Faker;
+import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.github.javafaker.Faker;
+import java.util.Map;
 
-import api.endpoints.EndPoint;
-import api.payload.User;
-import io.restassured.response.Response;
-
-public class UserTests {
+public class UserTests extends BaseTest {
 	
 	Faker faker;
 	User userPayload;
 	
-	public Logger logger;
-	
 	@BeforeClass
 	public void setupData() {
+		super.setupData();
+
 		faker = new Faker();
 		userPayload = new User();
 		
@@ -33,9 +29,6 @@ public class UserTests {
 		userPayload.setEmail(faker.internet().safeEmailAddress());
 		userPayload.setPassword(faker.internet().password(5, 10));
 		userPayload.setPhone(faker.phoneNumber().cellPhone());
-		
-		//logs
-		logger = LogManager.getLogger(this.getClass());
 	}
 	
 	@Test(priority = 1)
@@ -45,7 +38,7 @@ public class UserTests {
 		
 		Response response = EndPoint.performPost(userPayload, "USER_CREATE_URL");
 		response.then().log().all();
-		
+
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
 		logger.info("************* User created **************");
@@ -56,7 +49,7 @@ public class UserTests {
 	public void testGetUserByName() {
 		logger.info("************* Reading user **************");
 
-		Response response = EndPoint.performGet("USER_GET_URL", "username", userPayload.getUsername());
+		Response response = EndPoint.performGetByParamName("USER_GET_URL", "username", userPayload.getUsername());
 		response.then().log().all();
 		
 		Assert.assertEquals(response.getStatusCode(), 200);
@@ -78,7 +71,7 @@ public class UserTests {
 		
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseUpdated = EndPoint.performGet("USER_GET_URL", "username", userPayload.getUsername());
+		Response responseUpdated = EndPoint.performGetByParamName("USER_GET_URL", "username", userPayload.getUsername());
 		
 		Assert.assertEquals(responseUpdated.getStatusCode(), 200);
 		Assert.assertEquals(responseUpdated.path("email"), userPayload.getEmail());
@@ -91,7 +84,7 @@ public class UserTests {
 		
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseDeleted = EndPoint.performGet("USER_GET_URL", "username", userPayload.getUsername());
+		Response responseDeleted = EndPoint.performGetByParamName("USER_GET_URL", "username", userPayload.getUsername());
 		
 		Assert.assertEquals(responseDeleted.getStatusCode(), 404);
 	}

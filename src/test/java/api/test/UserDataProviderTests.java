@@ -1,26 +1,14 @@
 package api.test;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
-import api.utilities.DataProviders;
 import api.endpoints.EndPoint;
 import api.payload.User;
+import api.utilities.DataProviders;
 import io.restassured.response.Response;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 
-public class UserDataProviderTests {
-	
-	public Logger logger;
-
-	@BeforeClass
-	public void setupData() {
-		//logs
-		logger = LogManager.getLogger(this.getClass());
-	}
+public class UserDataProviderTests extends BaseTest {
 	
 	@Test(priority = 5, dataProvider = "UserData", dataProviderClass = DataProviders.class)
 	public void testPostUser(User user) {
@@ -39,7 +27,7 @@ public class UserDataProviderTests {
 		Response response = EndPoint.performDelete("USER_DELETE_URL", "username", user.getUsername());
 		Assert.assertEquals(response.getStatusCode(), 200);
 		
-		Response responseDeleted = EndPoint.performGet("USER_GET_URL", "username", user.getUsername());
+		Response responseDeleted = EndPoint.performGetByParamName("USER_GET_URL", "username", user.getUsername());
 		Assert.assertEquals(responseDeleted.getStatusCode(), 404);
 	}
 	
